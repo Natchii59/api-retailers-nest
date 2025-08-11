@@ -1,0 +1,26 @@
+{
+  "name": "my-turborepo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "",
+  "author": "",
+  "license": "UNLICENSED",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "test:e2e": "turbo run test:e2e",
+    "lint": "turbo run lint",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "prettier": "^3.6.2",
+    "turbo": "^2.5.5"
+  },
+  "packageManager": "pnpm@10.14.0",
+  "engines": {
+    "node": ">=22"
+  }
+}
