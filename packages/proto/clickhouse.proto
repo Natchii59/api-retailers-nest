@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package clickhouse;
+
+option go_package = "api-retailers-nest/packages/proto/go";
+
+import "google/protobuf/timestamp.proto";
+
+service ClickHouseService {
+  // Health check
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
+  
+  // Retailers operations
+  rpc GetRetailers(GetRetailersRequest) returns (GetRetailersResponse);
+  rpc GetRetailersStream(GetRetailersRequest) returns (stream RetailerStreamResponse);
+}
+
+// Retailer entity with optional fields
+message Retailer {
+  optional string id = 1;                                    // UUID v4 (optional if not in SELECT)
+  optional string name = 2;                                  // String (optional if not in SELECT)
+  optional google.protobuf.Timestamp created_at = 3;         // DateTime (optional if not in SELECT)
+}
+
+// Get multiple retailers with SQL query
+message GetRetailersRequest {
+  string sql_query = 1;                 // SQL query to execute
+  map<string, string> parameters = 2;   // Named parameters for the query
+  
+  // Optional pagination (applied after the query)
+  int32 limit = 3;
+  int32 offset = 4;
+}
+
+message GetRetailersResponse {
+  repeated Retailer retailers = 1;       // Toujours présent, même si vide []
+  int64 count = 2;                       // Toujours présent, même si 0
+  int64 execution_time_ms = 3;           // Toujours présent
+  string error = 4;                      // Seulement si erreur
+}
+
+// Streaming response for large datasets
+message RetailerStreamResponse {
+  Retailer retailer = 1;
+  bool is_last = 2;
+  int64 execution_time_ms = 3;        // Temps d'exécution total du stream (seulement dans le dernier message)
+  string error = 4;
+}
+
+// Health check messages
+message HealthCheckRequest {
+  // Empty for now
+}
+
+message HealthCheckResponse {
+  bool healthy = 1;
+  string version = 2;
+  int64 uptime_seconds = 3;
+  string error = 4;
+}

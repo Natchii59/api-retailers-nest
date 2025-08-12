@@ -1,0 +1,11 @@
+{
+  "name": "clickhouse-connector",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "go run cmd/server/main.go"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*"
+  }
+}
